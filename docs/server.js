@@ -4,7 +4,7 @@ var server = app.listen(3000);
 
 app.use(express.static('docs'));
 
-//create a websocket to detect new connection to the server
+//create a websocket to detect new connections to the server
 /*
 //Load the socket.io library
 var socket = require('socket.io');
