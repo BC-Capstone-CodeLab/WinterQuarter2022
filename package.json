@@ -2,9 +2,9 @@
   "name": "realtime-simple-chat-app",
   "version": "1.0.0",
   "description": "Simple chat",
-  "main": "server.js",
+  "main": "script.js",
   "scripts": {
-    "run": "nodemon server.js"
+    "devStart": "nodemon server.js"
   },
   "repository": {
     "type": "git",
