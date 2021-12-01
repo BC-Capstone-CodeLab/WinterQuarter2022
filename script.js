@@ -14,7 +14,7 @@ const firebaseConfig =
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const dataRef  = ref(database, 'Edits/');
+const dataRef  = ref(database, 'messages/');
 
 //const socket = io('http://localhost:3000')
 
@@ -23,48 +23,40 @@ const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 
 const name = prompt('What is your name?')
-appendMessage('You joined')
-//socket.emit('new-user', name)
+displayMessage('You joined')
+
+//Write new-user name to firebase database
 set(dataRef, {'new-user': name})
-onValue(`${dataRef}/new-user`, appendMessage);
+
+//Listen to firebase database and update othe sessions
+onValue(dataRef, displayMessage);
  
 //socket.on('chat-message', data => {
 //  appendMessage(`${data.name}: ${data.message}`)
 //})
-onValue(`${dataRef}/chat-message`, appendMessage);
+onValue(dataRef, displayMessage);
 
 //socket.on('user-connected', name => {
 //  appendMessage(`${name} connected`)
 //})
-onValue(`${dataRef}/connected`, appendMessage);
+onValue(dataRef, displayMessage);
 
 //socket.on('user-disconnected', name => {
 //  appendMessage(`${name} disconnected`)
 //})
-onValue(`${dataRef}/disconnected`, appendMessage);
+onValue(dataRef, displayMessage);
 
 messageForm.addEventListener('submit', e => {
   e.preventDefault()
   const message = messageInput.value
-  appendMessage(`You: ${message}`)
+  displayMessage(`You: ${message}`)
   //socket.emit('send-chat-message', message)
   set(dataRef, {edit: message})
   messageInput.value = ''
 })
 
-function appendMessage(message) {
+function displayMessage(message) {
   const messageElement = document.createElement('div')
   messageElement.innerText = message
   messageContainer.append(messageElement)
 }
-
-
-function sendDataToFirebase(data)
-{
-  //socket.emit('text', edit)
-  set(dataRef, {edit: data});
-}
-
-
-
-
