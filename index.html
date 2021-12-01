@@ -6,9 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Chat App</title>
   <link rel="stylesheet" href="/style.css">
-  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
-  <script defer src="script.js"></script>
-  </head>
+</head>
 
 <body>
   <div id="message-container"></div>
@@ -17,5 +15,56 @@
     <button type="submit" id="send-button">Send</button>
   </form>
 </body>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+
+  const firebaseConfig =
+  {
+    apiKey: "AIzaSyDICcooHUciQZvAs_dPpExVxqBhtJMojbY",
+    authDomain: "codelab-database-1.firebaseapp.com",
+    databaseURL: "https://codelab-database-1-default-rtdb.firebaseio.com",
+    projectId: "codelab-database-1",
+    storageBucket: "codelab-database-1.appspot.com",
+    messagingSenderId: "573387563239",
+    appId: "1:573387563239:web:161f23412c218ba50ac242",
+    measurementId: "G-4XTVC35JQL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const dataRef  = ref(database, 'Messages/');
+
+  const messageContainer = document.getElementById('message-container')
+  const messageForm = document.getElementById('send-container')
+  const messageInput = document.getElementById('message-input')
+
+  const name = prompt('What is your name?')
+
+  messageForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const message = messageInput.value
+    displayMessage(`You: ${message}`)
+
+    set(dataRef, {userMess: message, userName: name})
+    messageInput.value = ''
+  })
+
+  onValue(dataRef, displayReceiverMessage);
+
+  function displayMessage(message) 
+  {
+    const messageElement = document.createElement('div')
+    messageElement.innerText = message
+    messageContainer.append(messageElement)
+  }
+
+  function displayReceiverMessage(messageObj)
+  {
+      if (messageObj.val().userName != name)
+        displayMessage(`${messageObj.val().userName}: ${messageObj.val().userMess}`)
+  }
+</script>
 
 </html>

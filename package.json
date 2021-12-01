@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/WebDevSimplified/Realtime-Simple-Chat-App#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "socket.io": "^4.4.0"
   },
   "devDependencies": {
