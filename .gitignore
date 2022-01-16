@@ -1,9 +1,0 @@
-# ignore the NodeJs modules
-node_modules
-
-# ignore local server code : server.js
-server.js
-
-# ignore NodeJS configuration files
-package-lock.json
-package.json
