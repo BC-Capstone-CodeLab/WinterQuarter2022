@@ -76,7 +76,7 @@ function login(userName, password)
         userObjList[user.key] = userdb.child("users").child(user.key).child("password").get().val();
     }
     // checking for user input
-    if(userName.length < 1 || password.length || 1)
+    if(userName.length < 1 || password.length < 1)
     {
         console.log("Username or password must be 1 or more characters, please try again.");
     }
