@@ -65,7 +65,7 @@ var layoutConfig = {
 };
 
 $(document).ready(function () {
-    require(["vs/editor/editor.main"], function (ignorable, App, DB ) {
+    require(["vs/editor/editor.main"], function (ignorable) {
         layout = new GoldenLayout(layoutConfig, $("#ide-windows"));
 
         layout.registerComponent("code area", function (container, state) {
@@ -154,20 +154,35 @@ $(document).ready(function () {
         messagingSenderId: "573387563239",
         appId: "1:573387563239:web:161f23412c218ba50ac242",
         measurementId: "G-4XTVC35JQL"
-        };
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const dataRef  = ref(database, 'Edits/');
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const dataRef  = ref(database, 'Edits/');
 
 
-        onValue(dataRef, function(data){
-            sourceEditor.setValue(data.val().userEdit)
-        });
-        
-        sourceEditor.getModel().onDidChangeContent(()=>{
-            set(dataRef, {userEdit : sourceEditor.getValue()})
-        });
+    onValue(dataRef, function(data){
+	    
+		const {range, text} = data.val().userEdit;
 
+		const rangeObj = new Selection(range.startLineNumber, range.startColumn,
+							range.endLineNumber, range.endColumn);
+
+		sourceEditor.getModel().applyEdit([{rangeObj, text:text}]);
+
+    });
+    
+    sourceEditor.getModel().onDidChangeContent((event)=>{
+
+		event.changes.forEach(change => {
+			
+			set(dataRef, {userEdit : {
+					range,
+					rangeOffset,
+					rangeLength,
+					text } = change 
+			});
+		});
+    });
  
 });
