@@ -165,45 +165,50 @@ $(document).ready(function () {
 
 
     onValue(dataRef, function(data){
-	    
-		const {position, text} = data.val().userEdit;		
-							
-		const range = new monaco.Selection(position.lineNumber, position.column,
-											position.endLineNumber, position.endColumn);
-							
-		sourceEditor.getModel().applyEdits([{range, text:text}]);
+	    if (userId !== data.val().userId)
+		{
+			const {position, text} = data.val().userEdit;		
+								
+			const range = new monaco.Selection(position.lineNumber, position.column,
+												position.endLineNumber, position.endColumn);
+								
+			sourceEditor.getModel().applyEdits([{range, text: text}]);
+		}
     });
     
     sourceEditor.onKeyDown((event)=>{
-		
+		console.log(sourceEditor.getPosition());
 		// check if user entered special key
 		// Not yet implemented. Backspace key implemented for deletion.
-		if (event.browserEvent.key.length > 1 && event.browserEvent.key !== 'Backspace')
-			return;
-		
-		// Get key then cursorPosition, 
-		// hence we can deduce the intial and final cursor position
-		const key = event.browserEvent.key;
-		const cursorPosition = sourceEditor.getPosition();
-		
-		// endlineNumber is greater than lineNumber a.k.a starLineNumber
-		// endColumn == column
-		cursorPosition.endLineNumber = cursorPosition.lineNumber + 1;
-		cursorPosition.endColumn 	= cursorPosition.column;
-		
-		// if backspace, the endLineNumber is smaller than the lineNumber
-		// endColumn == column for now: need more implementation
-		if (event.browserEvent.key === 'Backspace'){
-			cursorPosition.lineNumber = cursorPosition.endLineNumber;
-			cursorPosition.column = cursorPosition.endColumn;
-			cursorPosition.endLineNumber = cursorPosition.lineNumber -1;
+		if (!(event.browserEvent.key.length > 1 && event.browserEvent.key !== 'Backspace'))
+		{
+			// Get key then cursorPosition, 
+			// hence we can deduce the intial and final cursor position
+			const cursorPosition = sourceEditor.getPosition();
+			const key = event.browserEvent.key;
+			const position = {};
+ 
+			
+			// if backspace, the endColumn is smaller than the column
+			// so, the current position is actually the end position, vise versa
+			// endLineNumber == lineNumber for now: need more implementation
+			// the smallest it gets is 1. The line columns start at index 1 not zero (I know!)
+			position.column = (cursorPosition.column <= 1)? 1 
+								: (key === 'Backspace') ? cursorPosition.column -1 : cursorPosition.column;
+								
+			position.endColumn = (cursorPosition.column <= 1)? 1
+									: (key === 'Backspace') ? cursorPosition.column : position.column;
+			
+			// endColumn is greater than column a.k.a starColumnNumber
+			// endLineNumber == lineNumber
+			position.lineNumber = cursorPosition.lineNumber;
+			position.endLineNumber = cursorPosition.lineNumber;
+			
+			const text =  (key === 'Backspace') ? "" : key ;
+			
+			set(dataRef, { userEdit : { position, text /* we add black space for now*/	}, 	userId});
 		}
-		
-		set(dataRef, {userEdit : {
-								position: cursorPosition, 
-								text: (key === 'Backspace') ? "" : key  /* we add black space for now*/
-							},
-						userId});
+			
 	});
  
 });
