@@ -1,6 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+const userId = uuidv4();
 
 var layout;
 var sourceEditor;
@@ -163,12 +166,12 @@ $(document).ready(function () {
 
     onValue(dataRef, function(data){
 	    
-		const {range: rangeObj, text} = data.val().userEdit;
+		const {range: rangeObj, text} = data.val().userEdit;		
 							
 		const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
 							rangeObj.endLineNumber, rangeObj.endColumn);
-
-		sourceEditor.getModel().applyEdits([{range, text: text}]);
+							
+		sourceEditor.getModel().applyEdits([{range, text:text}]);
     });
     
     sourceEditor.getModel().onDidChangeContent((event)=>{
@@ -176,7 +179,9 @@ $(document).ready(function () {
 		event.changes.forEach(change => {
 			
 			const {range,rangeOffset,rangeLength,text } = change;
-			set(dataRef, {userEdit : {range, rangeLength, rangeOffset, text}});
+			set(dataRef, {userEdit : {range, rangeLength, rangeOffset, text},
+						  userId});
+			
 		});
     });
  
