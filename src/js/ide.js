@@ -163,25 +163,20 @@ $(document).ready(function () {
 
     onValue(dataRef, function(data){
 	    
-		const {range, text} = data.val().userEdit;
+		const {range: rangeObj, text} = data.val().userEdit;
+							
+		const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
+							rangeObj.endLineNumber, rangeObj.endColumn);
 
-		const rangeObj = new Selection(range.startLineNumber, range.startColumn,
-							range.endLineNumber, range.endColumn);
-
-		sourceEditor.getModel().applyEdit([{rangeObj, text:text}]);
-
+		sourceEditor.getModel().applyEdits([{range, text: text}]);
     });
     
     sourceEditor.getModel().onDidChangeContent((event)=>{
 
 		event.changes.forEach(change => {
 			
-			set(dataRef, {userEdit : {
-					range,
-					rangeOffset,
-					rangeLength,
-					text } = change 
-			});
+			const {range,rangeOffset,rangeLength,text } = change;
+			set(dataRef, {userEdit : {range, rangeLength, rangeOffset, text}});
 		});
     });
  
