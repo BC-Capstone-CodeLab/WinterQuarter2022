@@ -175,13 +175,33 @@ $(document).ready(function () {
     });
     
     sourceEditor.onKeyDown((event)=>{
-	
-		const cursorPosition = sourceEditor.getPosition();
+		
+		// check if user entered special key
+		// Not yet implemented. Backspace key implemented for deletion.
+		if (event.browserEvent.key > 1 || event.browserEvent.key !== 'Backspace')
+			return;
+		
+		// Get key then cursorPosition, 
+		// hence we can deduce the intial and final cursor position
 		const key = event.browserEvent.key;
+		const cursorPosition = sourceEditor.getPosition();
+		
+		// endlineNumber is greater than lineNumber a.k.a starLineNumber
+		// endColumn == column
+		cursorPosition.endLineNumber = cursorPosition.lineNumber + 1;
+		cursorPosition.endColumn 	= cursorPosition.column;
+		
+		// if backspace, the endLineNumber is smaller than the lineNumber
+		// endColumn == column for now: need more implementation
+		if (event.browserEvent.key === 'Backspace'){
+			cursorPosition.lineNumber = cursorPosition.endLineNumber;
+			cursorPosition.column = cursorPosition.endColumn;
+			cursorPosition.endLineNumber = cursorPosition.lineNumber -1;
+		}
 		
 		set(dataRef, {userEdit : {
 								position: cursorPosition, 
-								text: (key.length <= 1 ) ? key : "" 
+								text: (key === 'Backspace') ? " " : key  /* we add black space for now*/
 							},
 						userId});
 	});
