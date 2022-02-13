@@ -166,23 +166,24 @@ $(document).ready(function () {
 
     onValue(dataRef, function(data){
 	    
-		const {range: rangeObj, text} = data.val().userEdit;		
+		const {position, text} = data.val().userEdit;		
 							
-		const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
-							rangeObj.endLineNumber, rangeObj.endColumn);
+		const range = new monaco.Selection(position.lineNumber, position.column,
+											position.lineNumber, position.column);
 							
 		sourceEditor.getModel().applyEdits([{range, text:text}]);
     });
     
-    sourceEditor.getModel().onDidChangeContent((event)=>{
-
-		event.changes.forEach(change => {
-			
-			const {range,rangeOffset,rangeLength,text } = change;
-			set(dataRef, {userEdit : {range, rangeLength, rangeOffset, text},
-						  userId});
-			
-		});
-    });
+    sourceEditor.onKeyDown((event)=>{
+	
+		const cursorPosition = sourceEditor.getPosition();
+		const key = event.browserEvent.key;
+		
+		set(dataRef, {userEdit : {
+								position: cursorPosition, 
+								text: (key.length <= 1 ) ? key : "" 
+							},
+						userId});
+	});
  
 });
