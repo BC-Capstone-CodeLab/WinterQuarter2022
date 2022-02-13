@@ -169,7 +169,7 @@ $(document).ready(function () {
 		const {position, text} = data.val().userEdit;		
 							
 		const range = new monaco.Selection(position.lineNumber, position.column,
-											position.lineNumber, position.column);
+											position.endLineNumber, position.endColumn);
 							
 		sourceEditor.getModel().applyEdits([{range, text:text}]);
     });
@@ -178,7 +178,7 @@ $(document).ready(function () {
 		
 		// check if user entered special key
 		// Not yet implemented. Backspace key implemented for deletion.
-		if (event.browserEvent.key > 1 || event.browserEvent.key !== 'Backspace')
+		if (event.browserEvent.key.length > 1 && event.browserEvent.key !== 'Backspace')
 			return;
 		
 		// Get key then cursorPosition, 
@@ -201,7 +201,7 @@ $(document).ready(function () {
 		
 		set(dataRef, {userEdit : {
 								position: cursorPosition, 
-								text: (key === 'Backspace') ? " " : key  /* we add black space for now*/
+								text: (key === 'Backspace') ? "" : key  /* we add black space for now*/
 							},
 						userId});
 	});
