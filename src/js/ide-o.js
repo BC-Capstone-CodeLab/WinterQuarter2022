@@ -162,35 +162,60 @@ $(document).ready(function () {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
     const dataRef  = ref(database, 'Edits/');
+	
 
-	let isLoop = false;
 
     onValue(dataRef, function(data){
-	    
-		if (userId !== data.val().userId)
+	    if (userId !== data.val().userId)
 		{
-			const {range: rangeObj, text} = data.val().userEdit;		
-							
-			const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
-							rangeObj.endLineNumber, rangeObj.endColumn);
-							
+			const {position, text} = data.val().userEdit;		
+								
+			const range = new monaco.Selection(position.lineNumber, position.column,
+												position.endLineNumber, position.endColumn);
+								
 			sourceEditor.getModel().applyEdits([{range, text: text}]);
-			isLoop = true;
 		}
     });
     
-    sourceEditor.getModel().onDidChangeContent((event)=>{
+    sourceEditor.onKeyDown((event)=>{
 		
-		if (!isLoop)
+		const key = event.browserEvent.key ;
+		
+		// check if user entered special key
+		// Not yet implemented. Backspace key implemented for deletion.
+		if (key.length <= 1 || key === 'Backspace' || key === 'Enter')
 		{
-			event.changes.forEach(change => {
-				
-				const {range, rangeOffset, rangeLength, text } = change;
-				set(dataRef, {userEdit : {range, rangeLength, rangeOffset, text}, userId});
-				
-			});
+			// Get key then cursorPosition, 
+			// hence we can deduce the intial and final cursor position
+			const cursorPosition = sourceEditor.getPosition();
+			const position = {};
+ 
+			
+			/** 
+				if backspace, the endColumn is greater than the column/startColumn
+				so, the current cursorPosition is actually the end position
+				endLineNumber == lineNumber for now: need more implementation for multi-line edit/delete
+				the smallest it column position is 1. The editor column start at index 1 not zero. (I know!)
+			*/
+			position.column = (cursorPosition.column <= 1)? 1 
+								: (key === 'Backspace') ? cursorPosition.column -1 : cursorPosition.column;
+								
+			position.endColumn = (cursorPosition.column <= 1)? 1
+									: (key === 'Backspace') ? cursorPosition.column : position.column;
+			
+			// endColumn is greater than column a.k.a starColumnNumber
+			// endLineNumber == lineNumber
+			position.lineNumber = cursorPosition.lineNumber;
+			position.endLineNumber = cursorPosition.lineNumber;
+			
+			//We might have to replace that by a switch statement
+			const text = (key === 'Backspace') ? "" /* we add empty string to erase */ 
+						: (key === 'Enter') ? "\n"
+						: key ; 	
+			
+			set(dataRef, { userEdit : { position, text }, userId});
 		}
-		isLoop = false;
-    });
+			
+	});
  
 });
