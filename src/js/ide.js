@@ -162,6 +162,7 @@ $(document).ready(function () {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
     const dataRef  = ref(database, 'Edits/');
+	
 
 
     onValue(dataRef, function(data){
@@ -177,7 +178,6 @@ $(document).ready(function () {
     });
     
     sourceEditor.onKeyDown((event)=>{
-		console.log(sourceEditor.getPosition());
 		
 		const key = event.browserEvent.key ;
 		
