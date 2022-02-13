@@ -178,21 +178,25 @@ $(document).ready(function () {
     
     sourceEditor.onKeyDown((event)=>{
 		console.log(sourceEditor.getPosition());
+		
+		const key = event.browserEvent.key ;
+		
 		// check if user entered special key
 		// Not yet implemented. Backspace key implemented for deletion.
-		if (!(event.browserEvent.key.length > 1 && event.browserEvent.key !== 'Backspace'))
+		if (key.length <= 1 || key === 'Backspace' || key === 'Enter')
 		{
 			// Get key then cursorPosition, 
 			// hence we can deduce the intial and final cursor position
 			const cursorPosition = sourceEditor.getPosition();
-			const key = event.browserEvent.key;
 			const position = {};
  
 			
-			// if backspace, the endColumn is smaller than the column
-			// so, the current position is actually the end position, vise versa
-			// endLineNumber == lineNumber for now: need more implementation
-			// the smallest it gets is 1. The line columns start at index 1 not zero (I know!)
+			/** 
+				if backspace, the endColumn is greater than the column/startColumn
+				so, the current cursorPosition is actually the end position
+				endLineNumber == lineNumber for now: need more implementation for multi-line edit/delete
+				the smallest it column position is 1. The editor column start at index 1 not zero. (I know!)
+			*/
 			position.column = (cursorPosition.column <= 1)? 1 
 								: (key === 'Backspace') ? cursorPosition.column -1 : cursorPosition.column;
 								
@@ -204,9 +208,12 @@ $(document).ready(function () {
 			position.lineNumber = cursorPosition.lineNumber;
 			position.endLineNumber = cursorPosition.lineNumber;
 			
-			const text =  (key === 'Backspace') ? "" : key ;
+			//We might have to replace that by a switch statement
+			const text = (key === 'Backspace') ? "" /* we add empty string to erase */ 
+						: (key === 'Enter') ? "\n"
+						: key ; 	
 			
-			set(dataRef, { userEdit : { position, text /* we add black space for now*/	}, 	userId});
+			set(dataRef, { userEdit : { position, text }, userId});
 		}
 			
 	});
