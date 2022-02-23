@@ -208,13 +208,17 @@ $(document).ready(function () {
 			const selection_presence = [];
 			const [afterContentClassName, beforeContentClassName] = ['fakeCursor', null];
 
+			const className = (rangeObj.startColumn === rangeObj.endColumn) 
+								? 'fakeSelection-non' 
+								: 'fakeSelection';
+
 			selection_presence.push({
 
 				/* startLine, startColumn, endLine, Endcolumn*/
 				range: new monaco.Range(rangeObj.startLineNumber, rangeObj.startColumn, 
 							rangeObj.endLineNumber, rangeObj.endColumn),
 				options: {
-						className: 'fakeSelection-none',
+						className, /*className: 'fakeSelection-none' or fakeSelection*/
 						afterContentClassName,
 						beforeContentClassName
 				}
