@@ -98,8 +98,9 @@ body {
 
 @keyframes blinkCursor
 {
-	0%		{opacity: 0;}
-	100%    {opacity: 1;}
+	to {
+    	visibility: hidden;
+    }
 }
 
 
@@ -113,7 +114,7 @@ body {
     border-bottom: rgb(255, 0, 0) solid 2px;
     height: 100%;
     box-sizing: border-box;
-	opacity:  blinkCursor 1s infinity;
+	animation:  blinkCursor 1s steps(5, start) infinite;;
 }
 .fakeCursor::after {
     content: "User Glodi";
