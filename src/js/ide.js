@@ -167,30 +167,85 @@ $(document).ready(function () {
 
     onValue(dataRef, function(data){
 	    
-		if (userId !== data.val().userId)
+		isLoop = true;
+			
+		if (userId === data.val().userId) return;
+
+		const {range: rangeObj, type, text} = data.val().userEdit;	
+
+
+		if (type === 'edit')
 		{
-			const {range: rangeObj, text} = data.val().userEdit;		
-							
+				
+						
 			const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
 							rangeObj.endLineNumber, rangeObj.endColumn);
 							
 			sourceEditor.getModel().applyEdits([{range, text: text}]);
-			isLoop = true;
 		}
+
+
+		if (type === 'presence')
+		{
+
+			const selection_presence = [];
+			const [afterContentClassName, beforeContentClassName] = [null, 'fakeCursor'];
+
+			selection_presence.push({
+
+				/* startLine, startColumn, endLine, Endcolumn*/
+				range: new range(rangeObj.startLineNumber, rangeObj.startColumn, 
+									rangeObj.endLineNumber, rangeObj.endColumn)),
+				options: {
+						classname: 'fakeSelection',
+						afterContentClassName,
+						beforeContentClassName
+				}
+
+			});
+
+			sourceEditor.getModel().deltaDecorations([], selection_presence);	
+		}
+				
     });
     
     sourceEditor.getModel().onDidChangeContent((event)=>{
 		
-		if (!isLoop)
-		{
-			event.changes.forEach(change => {
-				
-				const {range, rangeOffset, rangeLength, text } = change;
-				set(dataRef, {userEdit : {range, rangeLength, rangeOffset, text}, userId});
-				
+		isLoop = false;	
+
+		if (!isLoop) return;
+		
+		event.changes.forEach(change => {
+			
+			const {range, rangeOffset, rangeLength, text } = change;
+			set(dataRef, {
+						userEdit : {range, rangeLength, rangeOffset, text},
+						userId,
+						type: 'edit',
 			});
-		}
-		isLoop = false;
+			
+		});
+		
     });
  
+
+	sourceEditor.getModel().onDidChangeCursorSelection(() => {
+		
+		isLoop = false;
+
+		if (!isLoop) return;
+
+		const selection_range = sourceEditor.getSelection();
+		const model = sourceEditor.getModel();
+	
+		if (selection_range === null) return;
+		
+		set(dataRef, {
+					userEdit: {range: selection_range},
+					userId,
+					type: 'presence',
+		});
+	
+	});
+
 });

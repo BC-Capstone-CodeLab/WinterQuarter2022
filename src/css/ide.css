@@ -87,3 +87,38 @@ body {
     background-color: green;
 }
 
+
+@keyframes changeColor {
+    0% 		{opacity: .25;}
+    25% 	{opacity: .5;}
+    50% 	{opacity: 0.75;}
+    75% 	{opacity: 1;}
+    100% 	{opacity: 0;}
+}
+
+
+.fakeSelection {
+    background-color: rgb(250, 129, 0, .5)
+}
+.fakeCursor {
+    position: absolute;
+    border-left: rgb(255, 0, 13) solid 2px;
+    border-top: rgb(255, 0, 34) solid 2px;
+    border-bottom: rgb(255, 0, 0) solid 2px;
+    height: 100%;
+    box-sizing: border-box;
+}
+.fakeCursor::after {
+    content: "User Glodi";
+    color: black;
+    background: red;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    margin-top: -30px;
+    border-radius: 2px;
+    padding: 2px;
+    text-align: center;
+    animation: changeColor 5s;
+}
