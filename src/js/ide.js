@@ -172,12 +172,11 @@ $(document).ready(function () {
 		isLoop = true;
 
 
-		const {range: rangeObj, type, text} = data.val().userEdit;	
+		const {range: rangeObj, text} = data.val().userEdit;	
 
 
-		if (type === 'edit')
+		if (data.val().type === 'edit')
 		{
-				
 						
 			const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
 							rangeObj.endLineNumber, rangeObj.endColumn);
@@ -186,7 +185,7 @@ $(document).ready(function () {
 		}
 
 
-		if (type === 'presence')
+		if (data.val().type === 'presence')
 		{
 
 			const selection_presence = [];
@@ -212,7 +211,11 @@ $(document).ready(function () {
     
     sourceEditor.getModel().onDidChangeContent((event)=>{	
 
-		if (isLoop) return (isLoop = false);	
+		if (isLoop) 
+		{
+			isLoop = false;
+			return;
+		}
 			
 		event.changes.forEach(change => {
 			
@@ -230,9 +233,11 @@ $(document).ready(function () {
 
 	sourceEditor.onDidChangeCursorSelection(() => {
 		
-		isLoop = false;
-
-		if (!isLoop) return;
+		if (isLoop) 
+		{
+			isLoop = false;
+			return;
+		}
 
 		const selection_range = sourceEditor.getSelection();
 		const model = sourceEditor.getModel();
