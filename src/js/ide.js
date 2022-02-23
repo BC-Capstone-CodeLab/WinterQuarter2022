@@ -195,7 +195,7 @@ $(document).ready(function () {
 
 				/* startLine, startColumn, endLine, Endcolumn*/
 				range: new range(rangeObj.startLineNumber, rangeObj.startColumn, 
-									rangeObj.endLineNumber, rangeObj.endColumn)),
+									rangeObj.endLineNumber, rangeObj.endColumn),
 				options: {
 						classname: 'fakeSelection',
 						afterContentClassName,
