@@ -115,10 +115,13 @@ body {
 	}
 }
 
-
+/* The Animation and style is being rerender by the editor
+ * This is not what we want. We don't want the receiving editor 
+ * To manupulate or rerender the style sent by other editor.
+*/
 .fakeSelection-none {
     background-color: none;
-	animation: fadeSelection 5s;
+	/* animation: fadeSelection 5s;*/
 }
 
 .fakeSelection {
