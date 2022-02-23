@@ -3,8 +3,7 @@ import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebase
 
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
-const userId = uuidv4();
-
+var userId;
 var layout;
 var sourceEditor;
 var stdinEditor;
@@ -162,6 +161,18 @@ $(document).ready(function () {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
     const dataRef  = ref(database, 'Edits/');
+
+
+	if (localStorage.getItem('uuid') === null)
+	{
+		localStorage.setItem('uuid', uuidv4());
+	}
+	else
+	{
+		userId = localStorage.getItem('uuid');
+
+	}
+	
 
 	let isLoop = false;
 
