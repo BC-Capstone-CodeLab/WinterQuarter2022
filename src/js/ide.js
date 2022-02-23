@@ -178,15 +178,17 @@ $(document).ready(function () {
 
     onValue(dataRef, function(data){
 					
-		if (userId === data.val().userId) return null;
+		const fireData = data.val();		
+
+		if (fireData.userId === null || userId === fireData.userId) return null;
 
 		isLoop = true;
 
 
-		const {range: rangeObj, text} = data.val().userEdit;	
+		const {range: rangeObj, text} = fireData.userEdit;	
 
 
-		if (data.val().type === 'edit')
+		if (fireData.type === 'edit')
 		{
 						
 			const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
@@ -196,7 +198,7 @@ $(document).ready(function () {
 		}
 
 
-		if (data.val().type === 'presence')
+		if (fireData.type === 'presence')
 		{
 
 			const selection_presence = [];
