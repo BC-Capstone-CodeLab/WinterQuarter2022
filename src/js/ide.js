@@ -166,10 +166,11 @@ $(document).ready(function () {
 	let isLoop = false;
 
     onValue(dataRef, function(data){
-	    
-		isLoop = true;
-			
+					
 		if (userId === data.val().userId) return;
+
+		isLoop = true;
+
 
 		const {range: rangeObj, type, text} = data.val().userEdit;	
 
@@ -210,11 +211,11 @@ $(document).ready(function () {
     });
     
     sourceEditor.getModel().onDidChangeContent((event)=>{
-		
-		isLoop = false;	
 
-		if (!isLoop) return;
-		
+		isLoop = !isLoop;	
+
+		if (isLoop) return;
+			
 		event.changes.forEach(change => {
 			
 			const {range, rangeOffset, rangeLength, text } = change;
