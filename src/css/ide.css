@@ -96,6 +96,12 @@ body {
     100% 	{opacity: 0;}
 }
 
+@keyframes blinkCursor
+{
+	0%		{opacity: 0;}
+	100%    {opacity: 1;}
+}
+
 
 .fakeSelection {
     background-color: rgb(250, 129, 0, .5)
@@ -107,6 +113,7 @@ body {
     border-bottom: rgb(255, 0, 0) solid 2px;
     height: 100%;
     box-sizing: border-box;
+	opacity:  blinkCursor 1s infinity;
 }
 .fakeCursor::after {
     content: "User Glodi";
