@@ -210,11 +210,9 @@ $(document).ready(function () {
 				
     });
     
-    sourceEditor.getModel().onDidChangeContent((event)=>{
+    sourceEditor.getModel().onDidChangeContent((event)=>{	
 
-		isLoop = !isLoop;	
-
-		if (isLoop) return;
+		if (isLoop) return (isLoop = false);	
 			
 		event.changes.forEach(change => {
 			
