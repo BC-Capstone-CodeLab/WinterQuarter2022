@@ -167,7 +167,7 @@ $(document).ready(function () {
 
     onValue(dataRef, function(data){
 					
-		if (userId === data.val().userId) return;
+		if (userId === data.val().userId) return null;
 
 		isLoop = true;
 
@@ -189,15 +189,15 @@ $(document).ready(function () {
 		{
 
 			const selection_presence = [];
-			const [afterContentClassName, beforeContentClassName] = [null, 'fakeCursor'];
+			const [afterContentClassName, beforeContentClassName] = ['fakeCursor', null];
 
 			selection_presence.push({
 
 				/* startLine, startColumn, endLine, Endcolumn*/
-				range: new range(rangeObj.startLineNumber, rangeObj.startColumn, 
+				range: new monaco.Range(rangeObj.startLineNumber, rangeObj.startColumn, 
 							rangeObj.endLineNumber, rangeObj.endColumn),
 				options: {
-						classname: 'fakeSelection',
+						className: 'fakeSelection',
 						afterContentClassName,
 						beforeContentClassName
 				}
@@ -233,11 +233,11 @@ $(document).ready(function () {
 
 	sourceEditor.onDidChangeCursorSelection(() => {
 		
-		if (isLoop) 
-		{
-			isLoop = false;
-			return;
-		}
+
+		/* 
+		 * if (isLoop){isLoop = false;return;}
+		 *	We don't need a safeguard. Decorations don't trigger the onDidContentChange event.
+		 * */
 
 		const selection_range = sourceEditor.getSelection();
 		const model = sourceEditor.getModel();
