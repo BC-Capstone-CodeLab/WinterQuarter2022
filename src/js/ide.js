@@ -4,6 +4,7 @@ import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebase
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
 var userId;
+var decorationHandle;
 var layout;
 var sourceEditor;
 var stdinEditor;
@@ -161,7 +162,8 @@ $(document).ready(function () {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
     const dataRef  = ref(database, 'Edits/');
-
+	
+	decorationHandle = [];
 
 	if (localStorage.getItem('uuid') === null)
 	{
@@ -180,7 +182,7 @@ $(document).ready(function () {
 					
 		const fireData = data.val();		
 
-		if (fireData.userId === null || userId === fireData.userId) return null;
+		if (fireData === null || fireData.userId === null || userId === fireData.userId) return null;
 
 		isLoop = true;
 
@@ -210,14 +212,14 @@ $(document).ready(function () {
 				range: new monaco.Range(rangeObj.startLineNumber, rangeObj.startColumn, 
 							rangeObj.endLineNumber, rangeObj.endColumn),
 				options: {
-						className: 'fakeSelection',
+						className: 'fakeSelection-none',
 						afterContentClassName,
 						beforeContentClassName
 				}
 
 			});
 
-			sourceEditor.getModel().deltaDecorations([], selection_presence);	
+			decorationHandle = sourceEditor.getModel().deltaDecorations(decorationHandle, selection_presence);	
 		}
 				
     });

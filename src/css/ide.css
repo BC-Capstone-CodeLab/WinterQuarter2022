@@ -103,10 +103,28 @@ body {
     }
 }
 
+@keyframes fadeSelection 
+{
+	from {
+		background-color: yellow;
+		opacity: 0.5;
+	}
+	to {
+		background-color: none;
+		opacity: 0;
+	}
+}
+
+
+.fakeSelection-none {
+    background-color: none;
+	animation: fadeSelection 5s;
+}
 
 .fakeSelection {
-    background-color: rgb(250, 129, 0, .5)
+	background-color: green;
 }
+
 .fakeCursor {
     position: absolute;
     border-left: rgb(255, 0, 13) solid 2px;
@@ -114,13 +132,14 @@ body {
     border-bottom: rgb(255, 0, 0) solid 2px;
     height: 100%;
     box-sizing: border-box;
-	animation:  blinkCursor 1s steps(5, start) infinite;;
+	animation:  blinkCursor 1.25s steps(5, start) infinite;;
 }
 .fakeCursor::after {
     content: "User Glodi";
     color: black;
     background: red;
     opacity: 0;
+	visibility: visible;
     position: absolute;
     top: 50%;
     right: -50%;
