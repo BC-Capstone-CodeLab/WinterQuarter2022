@@ -126,15 +126,18 @@ body {
  * To manupulate or rerender the style sent by other editor.
 */
 .fakeSelection-none {
+
     background-color: none;
 	/* animation: fadeSelection 5s;*/
 }
 
 .fakeSelection {
+
 	background-color: rgb( 165, 105, 189, 0.5);
 }
 
 .fakeCursor {
+
     position: absolute;
     border-left: rgb(255, 0, 13) solid 2px;
     border-top: rgb(255, 0, 34) solid 2px;
