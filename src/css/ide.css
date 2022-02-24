@@ -1,3 +1,8 @@
+:root 
+{
+	--uuidv4:'User'	;
+}
+
 html, body {
     height: 100%;
     min-height: 100%;
@@ -6,7 +11,7 @@ html, body {
 }
 
 body {
-    background: url(/images/judge0_background.png) no-repeat center center fixed;
+    background: black ; /** no-repeat center center fixed; **/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -88,7 +93,8 @@ body {
 }
 
 
-@keyframes changeColor {
+@keyframes changeColor 
+{
     0% 		{opacity: .25;}
     25% 	{opacity: .5;}
     50% 	{opacity: 0.75;}
@@ -125,7 +131,7 @@ body {
 }
 
 .fakeSelection {
-	background-color: green;
+	background-color: lightgreen;
 }
 
 .fakeCursor {
@@ -137,8 +143,9 @@ body {
     box-sizing: border-box;
 	animation:  blinkCursor 1.25s steps(5, start) infinite;;
 }
-.fakeCursor::after {
-    content: "User Glodi";
+.fakeCursor::after { 
+
+    content: var(--uuidv4);
     color: black;
     background: red;
     opacity: 0;

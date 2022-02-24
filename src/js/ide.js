@@ -174,7 +174,8 @@ $(document).ready(function () {
 		userId = localStorage.getItem('uuid');
 
 	}
-	
+
+		
 
 	let isLoop = false;
 
@@ -204,6 +205,10 @@ $(document).ready(function () {
 		if (fireData.type === 'presence')
 		{
 			if (userId === fireData.userId) return null;
+			const id = fireData.userId.substring(0, 10);
+
+			document.documentElement.style.setProperty('--uuidv4', `"${id}"`);
+
 
 			const selection_presence = [];
 			const [afterContentClassName, beforeContentClassName] = ['fakeCursor', null];
