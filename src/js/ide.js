@@ -205,9 +205,9 @@ $(document).ready(function () {
 		if (fireData.type === 'presence')
 		{
 			if (userId === fireData.userId) return null;
-			const id = fireData.userId.substring(0, 10);
+			const id = fireData.userId.substring(0, 8);
 
-			document.documentElement.style.setProperty('--uuidv4', `"${id}"`);
+			document.documentElement.style.setProperty('--uuidv4', `"User ${id}"`);
 
 
 			const selection_presence = [];
