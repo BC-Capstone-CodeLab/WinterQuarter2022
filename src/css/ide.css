@@ -131,7 +131,7 @@ body {
 }
 
 .fakeSelection {
-	background-color: lightgreen;
+	background-color: rgb( 165, 105, 189, 0.5);
 }
 
 .fakeCursor {
