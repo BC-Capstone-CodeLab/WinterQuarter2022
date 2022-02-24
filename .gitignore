@@ -7,3 +7,6 @@ server.js
 # ignore NodeJS configuration files
 package-lock.json
 package.json
+
+# ignore vim swap files
+*.swp

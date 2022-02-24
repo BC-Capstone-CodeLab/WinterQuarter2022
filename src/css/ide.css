@@ -1,3 +1,8 @@
+:root 
+{
+	--uuidv4:'User'	;
+}
+
 html, body {
     height: 100%;
     min-height: 100%;
@@ -6,7 +11,7 @@ html, body {
 }
 
 body {
-    background: url(/images/judge0_background.png) no-repeat center center fixed;
+    background: black ; /** no-repeat center center fixed; **/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -87,3 +92,73 @@ body {
     background-color: green;
 }
 
+
+@keyframes changeColor 
+{
+    0% 		{opacity: .25;}
+    25% 	{opacity: .5;}
+    50% 	{opacity: 0.75;}
+    75% 	{opacity: 1;}
+    100% 	{opacity: 0;}
+}
+
+@keyframes blinkCursor
+{
+	to {
+    	visibility: hidden;
+    }
+}
+
+@keyframes fadeSelection 
+{
+	from {
+		background-color: yellow;
+		opacity: 0.5;
+	}
+	to {
+		background-color: none;
+		opacity: 0;
+	}
+}
+
+/* The Animation and style is being rerender by the editor
+ * This is not what we want. We don't want the receiving editor 
+ * To manupulate or rerender the style sent by other editor.
+*/
+.fakeSelection-none {
+
+    background-color: none;
+	/* animation: fadeSelection 5s;*/
+}
+
+.fakeSelection {
+
+	background-color: rgb( 165, 105, 189, 0.5);
+}
+
+.fakeCursor {
+
+    position: absolute;
+    border-left: rgb(255, 0, 13) solid 2px;
+    border-top: rgb(255, 0, 34) solid 2px;
+    border-bottom: rgb(255, 0, 0) solid 2px;
+    height: 100%;
+    box-sizing: border-box;
+	animation:  blinkCursor 1.25s steps(5, start) infinite;;
+}
+.fakeCursor::after { 
+
+    content: var(--uuidv4);
+    color: black;
+    background: red;
+    opacity: 0;
+	visibility: visible;
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    margin-top: -30px;
+    border-radius: 2px;
+    padding: 2px;
+    text-align: center;
+    animation: changeColor 5s;
+}

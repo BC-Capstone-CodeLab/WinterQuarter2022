@@ -3,8 +3,8 @@ import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebase
 
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
-var userId;
-var decorationHandle;
+const userId = uuidv4();
+
 var layout;
 var sourceEditor;
 var stdinEditor;
@@ -163,120 +163,59 @@ $(document).ready(function () {
     const database = getDatabase(app);
     const dataRef  = ref(database, 'Edits/');
 	
-	decorationHandle = [];
 
-	if (localStorage.getItem('uuid') === null)
-	{
-		localStorage.setItem('uuid', uuidv4());
-	}
-	else
-	{
-		userId = localStorage.getItem('uuid');
-
-	}
-
-		
-
-	let isLoop = false;
 
     onValue(dataRef, function(data){
-					
-		const fireData = data.val();		
-
-		if (fireData === null || fireData.userId === undefined) return null;
-
-
-		const {range: rangeObj, text} = fireData.userEdit;	
-
-
-		if (fireData.type === 'edit')
+	    if (userId !== data.val().userId)
 		{
-			if (userId === fireData.userId) return null;
-
-			isLoop = true;
-						
-			const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
-							rangeObj.endLineNumber, rangeObj.endColumn);
-							
+			const {position, text} = data.val().userEdit;		
+								
+			const range = new monaco.Selection(position.lineNumber, position.column,
+												position.endLineNumber, position.endColumn);
+								
 			sourceEditor.getModel().applyEdits([{range, text: text}]);
 		}
-
-
-		if (fireData.type === 'presence')
-		{
-			if (userId === fireData.userId) return null;
-			const id = fireData.userId.substring(0, 8);
-
-			document.documentElement.style.setProperty('--uuidv4', `"User ${id}"`);
-
-
-			const selection_presence = [];
-			const [afterContentClassName, beforeContentClassName] = ['fakeCursor', null];
-
-			const className = (rangeObj.startColumn === rangeObj.endColumn) 
-								? 'fakeSelection-non' 
-								: 'fakeSelection';
-
-			selection_presence.push({
-
-				/* startLine, startColumn, endLine, Endcolumn*/
-				range: new monaco.Range(rangeObj.startLineNumber, rangeObj.startColumn, 
-							rangeObj.endLineNumber, rangeObj.endColumn),
-				options: {
-						className, /*className: 'fakeSelection-none' or fakeSelection*/
-						afterContentClassName,
-						beforeContentClassName
-				}
-
-			});
-
-			decorationHandle = sourceEditor.getModel().deltaDecorations(decorationHandle, selection_presence);	
-		}
-				
     });
     
-    sourceEditor.getModel().onDidChangeContent((event)=>{	
-
-		if (isLoop) 
+    sourceEditor.onKeyDown((event)=>{
+		
+		const key = event.browserEvent.key ;
+		
+		// check if user entered special key
+		// Not yet implemented. Backspace key implemented for deletion.
+		if (key.length <= 1 || key === 'Backspace' || key === 'Enter')
 		{
-			isLoop = false;
-			return;
+			// Get key then cursorPosition, 
+			// hence we can deduce the intial and final cursor position
+			const cursorPosition = sourceEditor.getPosition();
+			const position = {};
+ 
+			
+			/** 
+				if backspace, the endColumn is greater than the column/startColumn
+				so, the current cursorPosition is actually the end position
+				endLineNumber == lineNumber for now: need more implementation for multi-line edit/delete
+				the smallest it column position is 1. The editor column start at index 1 not zero. (I know!)
+			*/
+			position.column = (cursorPosition.column <= 1)? 1 
+								: (key === 'Backspace') ? cursorPosition.column -1 : cursorPosition.column;
+								
+			position.endColumn = (cursorPosition.column <= 1)? 1
+									: (key === 'Backspace') ? cursorPosition.column : position.column;
+			
+			// endColumn is greater than column a.k.a starColumnNumber
+			// endLineNumber == lineNumber
+			position.lineNumber = cursorPosition.lineNumber;
+			position.endLineNumber = cursorPosition.lineNumber;
+			
+			//We might have to replace that by a switch statement
+			const text = (key === 'Backspace') ? "" /* we add empty string to erase */ 
+						: (key === 'Enter') ? "\n"
+						: key ; 	
+			
+			set(dataRef, { userEdit : { position, text }, userId});
 		}
 			
-		event.changes.forEach(change => {
-			
-			const {range, rangeOffset, rangeLength, text } = change;
-			set(dataRef, {
-						userEdit : {range, rangeLength, rangeOffset, text},
-						userId,
-						type: 'edit',
-			});
-			
-		});
-		
-    });
- 
-
-	sourceEditor.onDidChangeCursorSelection((event) => {
-
-		/* 
-		 * if (isLoop){isLoop = false;return;}
-		 *	We don't need a safeguard. Decorations don't trigger the onDidContentChange event.
-		 * */
-
-		if ( event.reason === 2 ) return null;
-
-		const selection_range = sourceEditor.getSelection();
-		const model = sourceEditor.getModel();
-	
-		if (selection_range === null) return;
-		
-		set(dataRef, {
-					userEdit: {range: selection_range},
-					userId,
-					type: 'presence',
-		});
-	
 	});
-
+ 
 });
