@@ -1,7 +1,7 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
-
-import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+import * as monaco from 'monaco-editor'
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import { uuid } from 'uuidv4';
 
 var userId;
 var decorationHandle;
@@ -68,87 +68,86 @@ var layoutConfig = {
 };
 
 $(document).ready(function () {
-    require(["vs/editor/editor.main"], function (ignorable) {
-        layout = new GoldenLayout(layoutConfig, $("#ide-windows"));
+    
+    layout = new GoldenLayout(layoutConfig, $("#ide-windows"));
 
-        layout.registerComponent("code area", function (container, state) {
-                sourceEditor = monaco.editor.create(container.getElement()[0], {
-                    automaticLayout: true,
-                    theme: "vs-dark",
-                    scrollBeyondLastLine: true,
-                    readOnly: state.readOnly,
-                    language: "java",
-                    minimap: {
-                        enabled: false
-                    }
-                });
-
-        });
-
-        layout.registerComponent("stdin", function (container, state) {
-            stdinEditor = monaco.editor.create(container.getElement()[0], {
+    layout.registerComponent("code area", function (container, state) {
+            sourceEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
                 theme: "vs-dark",
-                scrollBeyondLastLine: false,
+                scrollBeyondLastLine: true,
                 readOnly: state.readOnly,
-                language: "plaintext",
-                minimap: {
-                    enabled: false
-                }
-            });
-        });
-
-        layout.registerComponent("stdout", function (container, state) {
-            stdoutEditor = monaco.editor.create(container.getElement()[0], {
-                automaticLayout: true,
-                theme: "vs-dark",
-                scrollBeyondLastLine: false,
-                readOnly: state.readOnly,
-                language: "plaintext",
+                language: "java",
                 minimap: {
                     enabled: false
                 }
             });
 
-            container.on("tab", function(tab) {
-                tab.element.append("<span id=\"stdout-dot\" class=\"dot\" hidden></span>");
-                tab.element.on("mousedown", function(e) {
-                    e.target.closest(".lm_tab").children[3].hidden = true;
-                });
-            });
+    });
+
+    layout.registerComponent("stdin", function (container, state) {
+        stdinEditor = monaco.editor.create(container.getElement()[0], {
+            automaticLayout: true,
+            theme: "vs-dark",
+            scrollBeyondLastLine: false,
+            readOnly: state.readOnly,
+            language: "plaintext",
+            minimap: {
+                enabled: false
+            }
+        });
+    });
+
+    layout.registerComponent("stdout", function (container, state) {
+        stdoutEditor = monaco.editor.create(container.getElement()[0], {
+            automaticLayout: true,
+            theme: "vs-dark",
+            scrollBeyondLastLine: false,
+            readOnly: state.readOnly,
+            language: "plaintext",
+            minimap: {
+                enabled: false
+            }
         });
 
-        layout.registerComponent("stderr", function (container, state) {
-            stderrEditor = monaco.editor.create(container.getElement()[0], {
-                automaticLayout: true,
-                theme: "vs-dark",
-                scrollBeyondLastLine: false,
-                readOnly: state.readOnly,
-                language: "plaintext",
-                minimap: {
-                    enabled: false
-                }
-            });
-
-            container.on("tab", function(tab) {
-                tab.element.append("<span id=\"stderr-dot\" class=\"dot\" hidden></span>");
-                tab.element.on("mousedown", function(e) {
-                    e.target.closest(".lm_tab").children[3].hidden = true;
-                });
+        container.on("tab", function(tab) {
+            tab.element.append("<span id=\"stdout-dot\" class=\"dot\" hidden></span>");
+            tab.element.on("mousedown", function(e) {
+                e.target.closest(".lm_tab").children[3].hidden = true;
             });
         });
+    });
 
-        
-        layout.on("initialised", function () {
-            $("#upper-container").css("border-bottom", "1px solid black");
-            sourceEditor.focus();
+    layout.registerComponent("stderr", function (container, state) {
+        stderrEditor = monaco.editor.create(container.getElement()[0], {
+            automaticLayout: true,
+            theme: "vs-dark",
+            scrollBeyondLastLine: false,
+            readOnly: state.readOnly,
+            language: "plaintext",
+            minimap: {
+                enabled: false
+            }
         });
-        
-        layout.init();
+
+        container.on("tab", function(tab) {
+            tab.element.append("<span id=\"stderr-dot\" class=\"dot\" hidden></span>");
+            tab.element.on("mousedown", function(e) {
+                e.target.closest(".lm_tab").children[3].hidden = true;
+            });
+        });
     });
 
 
-    const firebaseConfig = 
+    layout.on("initialised", function () {
+        $("#upper-container").css("border-bottom", "1px solid black");
+        sourceEditor.focus();
+    });
+
+    layout.init();
+
+
+    const firebaseConfig =
     {
         apiKey: "AIzaSyDICcooHUciQZvAs_dPpExVxqBhtJMojbY",
         authDomain: "codelab-database-1.firebaseapp.com",
@@ -162,12 +161,12 @@ $(document).ready(function () {
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
     const dataRef  = ref(database, 'Edits/');
-	
+
 	decorationHandle = [];
 
 	if (localStorage.getItem('uuid') === null)
 	{
-		localStorage.setItem('uuid', uuidv4());
+		localStorage.setItem('uuid', uuid());
 	}
 	else
 	{
@@ -175,18 +174,18 @@ $(document).ready(function () {
 
 	}
 
-		
+
 
 	let isLoop = false;
 
     onValue(dataRef, function(data){
-					
-		const fireData = data.val();		
+
+		const fireData = data.val();
 
 		if (fireData === null || fireData.userId === undefined) return null;
 
 
-		const {range: rangeObj, text} = fireData.userEdit;	
+		const {range: rangeObj, text} = fireData.userEdit;
 
 
 		if (fireData.type === 'edit')
@@ -194,10 +193,10 @@ $(document).ready(function () {
 			if (userId === fireData.userId) return null;
 
 			isLoop = true;
-						
+
 			const range = new monaco.Selection(rangeObj.startLineNumber, rangeObj.startColumn,
 							rangeObj.endLineNumber, rangeObj.endColumn);
-							
+
 			sourceEditor.getModel().applyEdits([{range, text: text}]);
 		}
 
@@ -213,14 +212,14 @@ $(document).ready(function () {
 			const selection_presence = [];
 			const [afterContentClassName, beforeContentClassName] = ['fakeCursor', null];
 
-			const className = (rangeObj.startColumn === rangeObj.endColumn) 
-								? 'fakeSelection-non' 
+			const className = (rangeObj.startColumn === rangeObj.endColumn)
+								? 'fakeSelection-non'
 								: 'fakeSelection';
 
 			selection_presence.push({
 
 				/* startLine, startColumn, endLine, Endcolumn*/
-				range: new monaco.Range(rangeObj.startLineNumber, rangeObj.startColumn, 
+				range: new monaco.Range(rangeObj.startLineNumber, rangeObj.startColumn,
 							rangeObj.endLineNumber, rangeObj.endColumn),
 				options: {
 						className, /*className: 'fakeSelection-none' or fakeSelection*/
@@ -230,36 +229,36 @@ $(document).ready(function () {
 
 			});
 
-			decorationHandle = sourceEditor.getModel().deltaDecorations(decorationHandle, selection_presence);	
+			decorationHandle = sourceEditor.getModel().deltaDecorations(decorationHandle, selection_presence);
 		}
-				
-    });
-    
-    sourceEditor.getModel().onDidChangeContent((event)=>{	
 
-		if (isLoop) 
+    });
+
+    sourceEditor.getModel().onDidChangeContent((event)=>{
+
+		if (isLoop)
 		{
 			isLoop = false;
 			return;
 		}
-			
+
 		event.changes.forEach(change => {
-			
+
 			const {range, rangeOffset, rangeLength, text } = change;
 			set(dataRef, {
 						userEdit : {range, rangeLength, rangeOffset, text},
 						userId,
 						type: 'edit',
 			});
-			
+
 		});
-		
+
     });
- 
+
 
 	sourceEditor.onDidChangeCursorSelection((event) => {
 
-		/* 
+		/*
 		 * if (isLoop){isLoop = false;return;}
 		 *	We don't need a safeguard. Decorations don't trigger the onDidContentChange event.
 		 * */
@@ -268,15 +267,15 @@ $(document).ready(function () {
 
 		const selection_range = sourceEditor.getSelection();
 		const model = sourceEditor.getModel();
-	
+
 		if (selection_range === null) return;
-		
+
 		set(dataRef, {
 					userEdit: {range: selection_range},
 					userId,
 					type: 'presence',
 		});
-	
+
 	});
 
 });
