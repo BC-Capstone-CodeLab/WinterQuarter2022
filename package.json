@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "firebase": "^9.6.8",
+    "monaco-editor": "^0.32.1",
+    "uuidv4": "^6.2.12"
   },
   "devDependencies": {
     "webpack": "^5.70.0",
