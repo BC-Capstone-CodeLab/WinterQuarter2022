@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "firebase": "^9.6.8",
     "monaco-editor": "^0.32.1",
+    "monaco-editor-webpack-plugin": "^7.0.1",
     "uuidv4": "^6.2.12"
   },
   "devDependencies": {
