@@ -1,7 +1,7 @@
 import * as monaco from 'monaco-editor'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 
 var userId;
 var decorationHandle;
@@ -68,7 +68,7 @@ var layoutConfig = {
 };
 
 $(document).ready(function () {
-    
+
     layout = new GoldenLayout(layoutConfig, $("#ide-windows"));
 
     layout.registerComponent("code area", function (container, state) {
