@@ -4,37 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="CodeLab -- Real-time code editor">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout.min.js" integrity="sha256-NhJAZDfGgv4PiB+GVlSrPdh3uc75XXYSM4su8hgTchI=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css" integrity="sha256-oIDR18yKFZtfjCJfDsJYpTBv1S9QmxYopeqw2dO96xM=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-dark-theme.css" integrity="sha256-ygw8PvSDJJUGLf6Q9KIQsYR3mOmiQNlDaxMLDOx9xL0=" crossorigin="anonymous" />
 
-	<script>
-        var require = {
-            paths: {
-                "vs": "https://unpkg.com/monaco-editor/min/vs", 
-                "firebase": "https://unpkg.com/firebase@9.6.0"  
-            }
-        };
-    </script>  
 
-    <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script> 
-    <script src="https://unpkg.com/monaco-editor@0.23.0/min/vs/editor/editor.main.nls.js"></script>
-    <script src="https://unpkg.com/monaco-editor@0.23.0/min/vs/editor/editor.main.js"></script>
-
-    <!-- <script type="text/javascript" src= "https://unpkg.com/firebase/firebase-app.js"></script>
-    <script type="text/javascript" src= "https://unpkg.com/firebase/firebase-database.js"></script>
-    -->
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
 
     <link type="text/css" rel="stylesheet" href="src/css/ide.css">
-	
-    <script src="src/js/ide.js" type="module"></script>
+
+    <script src="./dist/main.bundle.js" type="module"></script>
 
     <title>CodeLab Real-time collaboration Editor</title>
 
@@ -73,7 +57,7 @@
                 <i class="dropdown icon"></i>
             </div>
         </div>
-        
+
     </div>
 
     <div id="ide-windows"></div>
