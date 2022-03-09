@@ -6,3 +6,7 @@ server.js
 
 # ignore vim swap files
 *.swp
+
+# ignore the webpack compiled code
+dist
+
