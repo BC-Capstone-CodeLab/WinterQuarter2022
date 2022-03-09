@@ -3,6 +3,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
 	mode: process.env.NODE_ENV | 'development',
+	devtool: 'eval-source-map',
 	entry: './src/js/ide.js',
 	output: {
 		path: path.resolve(__dirname, 'dist'),
