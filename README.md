@@ -11,6 +11,7 @@
 npm install
 ```
 ...
+
 **Second Step**
 ```javascript
 /** Compile the code with webpack. */
