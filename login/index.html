@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>Firebase Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <ul id='reference'>
+	  <li><a class="active" href="#">Login</a></li>
+	  <li><a href="#">Sign up</a></li>
+	  <li><a href="#">Contact</a></li>
+	  <li><a href="#">About</a></li>
+  </ul>
+  
+  <div id="login_div" class="main-div" style="display:none;">
+    <h3>CodeLab Login</h3>
+    <input type="email" placeholder="Email" id="email_input" />
+    <input type="password" placeholder="Password" id="password_input" />
+
+    <button id="login_button">Login to Account</button>
+  </div>
+  
+  <div class="container">
+	  <h1>Sign Up</h1>
+	  <p>Enter your information to create an account</p>
+	  
+	  <hr>
+	  
+	  <label for="email"><b>Email</b></label>
+	  <input type="text" placeholder="Enter Email" name="email" required>
+
+	  <label for="psw"><b>Password</b></label>
+	  <input type="password" placeholder="Enter Password" name="psw" required>
+
+	  <label for="psw-repeat"><b>Repeat Password</b></label>
+	  <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+	  
+	  <div>
+		<button type="button" class="cancelbtn">Cancel</button>
+		<button type="submit" class="signupbtn">Sign Up</button>
+	  </div>
+  </div>
+  
+  <div id="user_div" class="loggedin-div" style="display:none;">
+    <h3>Welcome User</h3>
+    <p id="user_vue">You have successfully logged in.</p>
+    <button id = 'logout_button'>Logout</button>
+  </div>  
+
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  <script type="module" src="index.js"></script>
+
+</body>
+</html>
