@@ -39,13 +39,13 @@ function login(){
 	
 	document.querySelector('#user_vue').innerHTML = `Welcome User : ${email_id}`;
 	console.log(`User credential: ${user}`);
-
-	alert("Error : " + errorMessage);
 	
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
+	  
+    alert("Error : " + errorMessage);
   });
 
 }
