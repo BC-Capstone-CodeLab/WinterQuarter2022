@@ -29,12 +29,17 @@
         background-color: #04AA6D;
         color: white;
     }
-    .classname a{
 
-    }
-
-    }
 </style>
+<script src = "RegisterClass.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+   https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
 </HEAD>
 <BODY>
     <H1> <center> Welcome to Your CodeClass Page </center> </H1>
@@ -46,22 +51,29 @@
     </div>
      <br>
      <br>
-     <center><table border = "2px"> 
+   <table border = "2px"> 
          <tr>
              <td>
-                <div class="Queries">
-                    <a label for="ClassName">Class Name: <input type="text" id="ClassName" name="ClassName"> </a>
-                </div>
+                <form>
+                    <input type = "text" id = "className" placeholder = "Enter Class Name" /> <br>
+                    <input type = "text" id = "teacher" placeholder = "Enter Teacher Name" />
+                    <button onclick = "register()"> Create Class</button>
+
+                </form>
              </td>
              <td>
-                 
+                
              </td>
+             
          </tr>
-    </center>
+        
+
     </table>
    
         
 
     
 </BODY>
+
+
 </HTML>

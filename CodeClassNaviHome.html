@@ -38,5 +38,22 @@
         <a href="DropClass.html">Drop Class</a>
         <a href="Profile.html">Edit Profile</a>
       </div>
+      <table>
+          <tr>
+            <td>
+                <script>
+                    var classID = sessionStorage.getItem(classID);
+                    window.onload = function() {
+                        document.getElementbyID("classID").innerHTML = splitText;
+                    }
+                </script>
+                classID: <a id = "classID"></a>
+
+            </td>
+            <td>
+                <input type = "submit"/>
+            </td>
+          </tr>
+      </table>
 </BODY>
 </HTML>
