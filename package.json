@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "firebase": "^9.8.1",
+    "g": "^2.0.1",
     "serv": "^0.2.4"
   }
 }

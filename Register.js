@@ -1,3 +1,6 @@
+import { getDatabase, ref, set, onValue, update, get } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+
 var firebaseConfig = {
   apiKey: "AIzaSyC0smKAfTO24yVrTc0HXY-Krtch09othQY",
   authDomain: "userloginregistration-a365f.firebaseapp.com",
@@ -12,6 +15,7 @@ firebase.initializeApp(firebaseConfig);
 // Initialize variables
 const auth = firebase.auth()
 const database = firebase.database()
+
 
 // Set up our register function 
 function register () {
@@ -90,7 +94,7 @@ function login () {
     database_ref.child('users/' + user.uid).update(user_data)
 
     // DOne
-    alert('User Logged In!!')
+    window.location.href = "CodeClassNaviHome.html"
 
   })
   .catch(function(error) {

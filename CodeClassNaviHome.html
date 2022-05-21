@@ -29,6 +29,8 @@
         color: white;
     }
 </style>
+<link rel="stylesheet" href="test.css">
+
 </HEAD>
 <BODY>
     <H1> <center> Welcome to Your CodeClass Page </center> </H1>
@@ -40,20 +42,19 @@
       </div>
       <table>
           <tr>
-            <td>
-                <script>
-                    var classID = sessionStorage.getItem(classID);
-                    window.onload = function() {
-                        document.getElementbyID("classID").innerHTML = splitText;
-                    }
-                </script>
-                classID: <a id = "classID"></a>
+              <td> List of Classes:</td>
+          </tr>
+          <tr>
+            <td id = classid>
+
+                
 
             </td>
             <td>
-                <input type = "submit"/>
+                <button> join class </button>
             </td>
           </tr>
       </table>
 </BODY>
+<script type = "module" src = "./Display_list.js"></script>
 </HTML>

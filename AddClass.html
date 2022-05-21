@@ -1,5 +1,7 @@
+<!doctype html>
 <HTML>
 <HEAD>
+    <link rel="stylesheet" href="test.css">
     <style>
     /* Add a black background color to the top navigation */
     .topnav {
@@ -31,14 +33,13 @@
     }
 
 </style>
-<script src = "RegisterClass.js"></script>
+<script type = "module" src = "./RegisterClass.js"></script>
 <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script> -->
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-   https://firebase.google.com/docs/web/setup#available-libraries -->
 
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+<!-- <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script> --> 
 
 </HEAD>
 <BODY>
@@ -57,7 +58,7 @@
                 <form>
                     <input type = "text" id = "className" placeholder = "Enter Class Name" /> <br>
                     <input type = "text" id = "teacher" placeholder = "Enter Teacher Name" />
-                    <button onclick = "register()"> Create Class</button>
+                    <button id = "registerbtn"> Create Class</button>
 
                 </form>
              </td>

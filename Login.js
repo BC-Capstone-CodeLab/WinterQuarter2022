@@ -58,6 +58,7 @@ signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
+    window.location.href = "CodeClassNaviHome.html";
     // ...
   })
   .catch((error) => {
