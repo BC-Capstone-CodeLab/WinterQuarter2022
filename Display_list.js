@@ -21,17 +21,42 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+window.addEventListener('load', function() {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+        var uid = user.uid;
+        get(child(dbRef, `Users/` + uid)).then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log(snapshot.val());
+            classIDlist = JSON.stringify(snapshot.val());
+            
+            var jsontest = '{"name": "Peter", "age": 22, "country": "United States"}'
+            console.log(classIDlist);
+            console.log(jsontest);
+            var classes = JSON.parse(classIDlist);
+            console.log(classes.Capstone.className);
+            document.getElementById("classid").innerHTML = classes.className;
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        })
+      }
+      else {
+          console.log("user does not exist");
+      }
+  })
+});
 // Get a reference to the database service
 const dbRef = ref(getDatabase(app));
 var classIDlist = ""
-get(child(dbRef, `Classes`)).then((snapshot) => {
+get(child(dbRef, `Users/` + user.uid + "/classList")).then((snapshot) => {
   if (snapshot.exists()) {
     console.log(snapshot.val());
     classIDlist = JSON.stringify(snapshot.val());
-    
-    var jsontest = '{"name": "Peter", "age": 22, "country": "United States"}'
-    console.log(classIDlist);
-    console.log(jsontest);
+     
     var classes = JSON.parse(classIDlist);
     console.log(classes.Capstone.className);
     document.getElementById("classid").innerHTML = classes.className;

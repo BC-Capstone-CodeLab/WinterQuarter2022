@@ -8,34 +8,24 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 // import {getDatabase} from "firebase/database";
 
 // // Your web app's Firebase configuration
-const firebaseConfig = {
-   apiKey: "AIzaSyC0smKAfTO24yVrTc0HXY-Krtch09othQY",
-   authDomain: "userloginregistration-a365f.firebaseapp.com",
-   databaseURL: "https://userloginregistration-a365f-default-rtdb.firebaseio.com",
-   projectId: "userloginregistration-a365f",
-   storageBucket: "userloginregistration-a365f.appspot.com",
-   messagingSenderId: "586687950561",
-   appId: "1:586687950561:web:b01dfc2b663f64386791a0"
-};
+var firebaseConfig = {
+    apiKey: "AIzaSyC0smKAfTO24yVrTc0HXY-Krtch09othQY",
+    authDomain: "userloginregistration-a365f.firebaseapp.com",
+    databaseURL: "https://userloginregistration-a365f-default-rtdb.firebaseio.com",
+    projectId: "userloginregistration-a365f",
+    storageBucket: "userloginregistration-a365f.appspot.com",
+    messagingSenderId: "586687950561",
+    appId: "1:586687950561:web:b01dfc2b663f64386791a0"
+  };
 
 
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+// Initialize variables
+const auth = firebase.auth()
+const database = firebase.database()
 
 
-// Get a reference to the database service
-var classdb = getDatabase(app);
-
-window.addEventListener('load', function() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log(user.email);
-        }
-        else {
-            console.log("user does not exist");
-        }
-    })
-});
 
 let btn = document.getElementById("registerbtn")
 btn.addEventListener("click", function() {
@@ -44,73 +34,22 @@ btn.addEventListener("click", function() {
     var rando = generateString(4);
     var classID = generateString(5);
     console.log(classID);
-//     var classList = [];
-//     var all_classes = {};
-//     const classlistref = ref(classdb);
-//     get(child(classlistref, "Classes")).then((snapshot) => {
-//         if (snapshot.exists()) {
-//             console.log(snapshot.val());
-//         }
-//         else {
-//             console.log("no data");
-//         }
-    
-//     }) .catch ((error) => {
-//         console.error(error);
-//     })
-
-
-//     for (const classes in all_classes)
-//     {
-//         classList.push(classes.key);
-//     }
- 
-//     // check to see if username already taken in database
-//    if(classList.includes(className))
-//     {
-//         console.log("ClassName already taken, please try again.");
-//     }
-//     // add user to database
-//     else
-//     {
-
-        alert("Invite Code is:" + rando);
-        // set(ref(classdb, 'Classes/' + className), {
-        //     className: className,
-        //     teachername: teacher, 
-        //     invitecode: rando,
-        //     Userlist: userlist}
-        // )
-        // .then(() => {
-        //     alert("Class Generated!");
-        // })
-        // .catch((error) => {
-        //     alert ('error');
-        //     console.log(error);
-        // });
-// set(ref(classdb, 'Classes/' + className), {
-//   className: className,
-//   teacherName: teacherName,
-//   invitecode : rando,
-//   Userlist: userlist
-// })
-// .then(() => {
-//     alert ("data saved");
-//   // Data saved successfully!
-// })
-// .catch((error) => {
-//     alert ("error");
-//   // The write failed...
-// });
+    var database_ref = database.ref();
+    var user = auth.currentUser;
+    alert("Invite Code is:" + rando);
+   
 alert("test1");
   alert("test2");
-  console.log(classID);
-set(ref(classdb, "Classes/" + className, {
-    className: className,
-    teacherName: teacher,
-    invitecode : rando
-  }));
- alert("test2");
+  var data = {
+      className: className,
+      teacherName: teacher,
+      inviteCode: rando
+  };
+
+  var classdata = {className: className};
+  database_ref.child('Classes/' + className).set(data);
+  database_ref.child('users/' + user.uid +'/classList').set(classdata);
+ alert(classdata);
     // }
 });
 // IMPORTANT: add default user entry to database if no existing user entries, default entry is required for functions to work
@@ -123,7 +62,7 @@ set(ref(classdb, "Classes/" + className, {
 
 function generateString(length) {
     const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-   let result = ' ';
+   let result = '';
    const charactersLength = characters.length;
    for ( let i = 0; i < length; i++ ) {
 

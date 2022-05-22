@@ -1,5 +1,6 @@
 import { getDatabase, ref, set, onValue, update, get } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
 
 var firebaseConfig = {
   apiKey: "AIzaSyC0smKAfTO24yVrTc0HXY-Krtch09othQY",
@@ -10,6 +11,8 @@ var firebaseConfig = {
   messagingSenderId: "586687950561",
   appId: "1:586687950561:web:b01dfc2b663f64386791a0"
 };
+
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 // Initialize variables
@@ -17,12 +20,18 @@ const auth = firebase.auth()
 const database = firebase.database()
 
 
+
+// Get a reference to the database service
+
+
+
 // Set up our register function 
-function register () {
+let btn = document.getElementById("reg")
+btn.addEventListener("click", function() {
   // Get all our input fields
-  email = document.getElementById('email').value
-  password = document.getElementById('password').value
-  full_name = document.getElementById('full_name').value
+  var email = document.getElementById('email').value
+  var password = document.getElementById('password').value
+  var full_name = document.getElementById('full_name').value
 
 
   // Validate input fields
@@ -46,13 +55,13 @@ function register () {
     var user_data = {
       email : email, 
       full_name : full_name,
-      last_login : Date.now()
+      last_login : Date.now(),
+      classList: null
     }
 
     // Push to Firebase Database
     database_ref.child('users/' + user.uid).set(user_data)
 
-    // DOne
     alert('User Created!!')
   })
   .catch(function(error) {
@@ -62,10 +71,11 @@ function register () {
 
     alert(error_message)
   })
-}
+});
 
 // Set up our login function
-function login () {
+let btn2 = document.getElementById("login")
+btn2.addEventListener("click", function() {
   // Get all our input fields
   email = document.getElementById('email').value
   password = document.getElementById('password').value
@@ -91,7 +101,7 @@ function login () {
     }
 
     // Push to Firebase Database
-    database_ref.child('users/' + user.uid).update(user_data)
+    database_ref.child('users/' + user.full_name).update(user_data)
 
     // DOne
     window.location.href = "CodeClassNaviHome.html"
@@ -104,14 +114,14 @@ function login () {
 
     alert(error_message)
   })
-}
+});
 
 
 
 
 // Validate Functions
 function validate_email(email) {
-  expression = /^[^@]+@\w+(\.\w+)+\w$/
+  var expression = /^[^@]+@\w+(\.\w+)+\w$/
   if (expression.test(email) == true) {
     // Email is good
     return true
